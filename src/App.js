@@ -20,18 +20,21 @@ function MainPage(props) {
   const classes = useStyles();
   const part = props.part;
 
-  function createData(prop, val) {
-    return { prop, val };
+  function createData(_id, title, isbn, author, description, published_date, publisher, updated_date) {
+    return { _id, title, isbn, author, description, published_date, publisher, updated_date };
   }
 
   const rows = [
-    createData("title", `${part.title}`),
-    createData("isbn", `${part.isbn}`),
-    createData("author", `${part.author}`),
-    createData("description", `${part.description}`),
-    createData("published_date", `${part.published_date}`),
-    createData("publisher", `${part.publisher}`),
-    createData("updated_date", `${part.updated_date}`),
+    createData(
+      `${part._id}`,
+      `${part.title}`,
+      `${part.isbn}`,
+      `${part.author}`,
+      `${part.description}`,
+      `${part.published_date}`,
+      `${part.publisher}`,
+      `${part.updated_date}`
+    ),
   ];
 
   return (
@@ -49,8 +52,14 @@ function MainPage(props) {
               <TableBody>
                 {rows.map((row) => (
                   <TableRow key={row.name}>
-                    <TableCell align="left">{row.prop}</TableCell>
-                    <TableCell align="right">{row.val}</TableCell>
+                    <TableCell align="left">{row._id}</TableCell>
+                    <TableCell align="left">{row.updated_date}</TableCell>
+                    <TableCell align="left">{row.title}</TableCell>
+                    <TableCell align="left">{row.isbn}</TableCell>
+                    <TableCell align="left">{row.author}</TableCell>
+                    <TableCell align="left">{row.description}</TableCell>
+                    <TableCell align="leftt">{row.published_date}</TableCell>
+                    <TableCell align="left">{row.publisher}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -92,5 +101,5 @@ export default function App(props) {
     ));
   }
 
-  return (<div> {CardSectionList} </div>);
+  return <div> {CardSectionList} </div>;
 }
