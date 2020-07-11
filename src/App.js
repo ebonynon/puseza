@@ -35,7 +35,7 @@ export default function App(props) {
   useEffect(() => {
     function fetchPart(props) {
       axios
-        .get("https://anjinz-api.vercel.app/api/parts/" + props.match.params.id)
+        .get("https://mern-01.now.sh/api/books")
         .then((res) => {
           console.log("Print-ShowPartSection-API-response: " + res.data);
           setResData(res.data);
@@ -47,31 +47,18 @@ export default function App(props) {
     fetchPart(props);
   }, []);
 
-  const share = async () => {
-    try {
-      await navigator.share({
-        title: `${ResData.part_number}`,
-        text: `${ResData.part_name}`,
-        url: `/part/${ResData._id}`,
-      });
-      console.log("Thanks for sharing!");
-    } catch (err) {
-      console.log(`Couldn't share because of`, err);
-    }
-  };
-
   function createData(prop, val) {
     return { prop, val };
   }
 
   const rows = [
-    createData("OEM part number", `${ResData.part_number}`),
-    createData("Part name", `${ResData.part_name}`),
-    createData("Brand", `${ResData.brand}`),
-    createData("Modle", `${ResData.modle}`),
-    createData("Applicability", `${ResData.applicability}`),
-    createData("Production period", `${ResData.production_period}`),
-    createData("Base price", `${ResData.base_price}`),
+    createData("title", `${ResData.title}`),
+    createData("isbn", `${ResData.isbn}`),
+    createData("author", `${ResData.author}`),
+    createData("description", `${ResData.description}`),
+    createData("published_date", `${ResData.published_date}`),
+    createData("publisher", `${ResData.publisher}`),
+    createData("updated_date", `${ResData.updated_date}`),
   ];
 
   return (
