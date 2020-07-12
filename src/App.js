@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import socketIOClient from "socket.io-client"; //socket.io
 import axios from "axios";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -20,8 +21,26 @@ function MainPage(props) {
   const classes = useStyles();
   const part = props.part;
 
-  function createData(_id, title, isbn, author, description, published_date, publisher, updated_date) {
-    return { _id, title, isbn, author, description, published_date, publisher, updated_date };
+  function createData(
+    _id,
+    title,
+    isbn,
+    author,
+    description,
+    published_date,
+    publisher,
+    updated_date
+  ) {
+    return {
+      _id,
+      title,
+      isbn,
+      author,
+      description,
+      published_date,
+      publisher,
+      updated_date,
+    };
   }
 
   const rows = [
@@ -74,20 +93,28 @@ function MainPage(props) {
 export default function App(props) {
   const [ResData, setResData] = useState([]);
 
+  // useEffect(() => {
+  //   function fetchPart() {
+  //     axios
+  //       .get("https://mern-01.now.sh/api/books")
+  //       .then((res) => {
+  //         console.log("Print-ShowPartSection-API-response: " + res.data);
+  //         setResData(res.data);
+  //       })
+  //       .catch((err) => {
+  //         console.log("Error from ShowPartSection");
+  //       });
+  //   }
+  //   fetchPart();
+  // }, []);
+
   useEffect(() => {
-    function fetchPart() {
-      axios
-        .get("https://mern-01.now.sh/api/books")
-        .then((res) => {
-          console.log("Print-ShowPartSection-API-response: " + res.data);
-          setResData(res.data);
-        })
-        .catch((err) => {
-          console.log("Error from ShowPartSection");
-        });
-    }
-    fetchPart();
+    const socket = socketIOClient(http://localhost:8082/api/books);
+    socket.on("FromAPI", data => {
+      setResData(res.data);
+    });
   }, []);
+
 
   console.log("XX :: ", ResData);
 
