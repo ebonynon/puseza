@@ -21,6 +21,19 @@ function MainPage(props) {
   const classes = useStyles();
   const part = props.part;
 
+  function fetchPart(id) {
+    console.log("ID :: ", id);
+    axios
+      .delete("https://mern-01.now.sh/api/books/" + id)
+      .then((res) => {
+        console.log("deleteClick done");
+        props.history.push("/");
+      })
+      .catch((err) => {
+        console.log("Error from deleteClick");
+      });
+  }
+
   function createData(
     _id,
     title,
@@ -79,6 +92,21 @@ function MainPage(props) {
                     <TableCell align="left">{row.description}</TableCell>
                     <TableCell align="leftt">{row.published_date}</TableCell>
                     <TableCell align="left">{row.publisher}</TableCell>
+                    <TableCell align="left">
+                      <button
+                        onClick={() => {
+                          if (
+                            window.confirm(
+                              "Are you sure you wish to delete this item?"
+                            )
+                          )
+                            fetchPart(row._id);
+                        }}
+                      >
+                        Delete me
+                      </button>
+                    </TableCell>{" "}
+                    *
                   </TableRow>
                 ))}
               </TableBody>
@@ -92,41 +120,47 @@ function MainPage(props) {
 
 export default function App(props) {
   const [ResData, setResData] = useState([]);
+  const [ResDataX, setResDataX] = useState([]);
 
-  // useEffect(() => {
-  //   function fetchPart() {
-  //     axios
-  //       .get("https://mern-01.now.sh/api/books")
-  //       .then((res) => {
-  //         console.log("Print-ShowPartSection-API-response: " + res.data);
-  //         setResData(res.data);
-  //       })
-  //       .catch((err) => {
-  //         console.log("Error from ShowPartSection");
-  //       });
-  //   }
-  //   fetchPart();
-  // }, []);
+  const ENDPOINT = "https://mern-01.now.sh/";
 
   useEffect(() => {
-    const socket = socketIOClient(http://localhost:8082/api/books);
-    socket.on("FromAPI", data => {
-      setResData(res.data);
-    });
-  }, []);
+    const socket = socketIOClient(ENDPOINT);
 
+    socket.emit("initial_data");
+    socket.on("FromAPI", (data) => {
+      setResData(data);
+    });
+    socket.on("FromAPIx", (data) => {
+      setResDataX(data);
+    });
+    socket.on("change_data", socket.emit("initial_data"));
+  }, []);
 
   console.log("XX :: ", ResData);
 
-  var CardSectionList;
+  var CardSectionList, CardSectionListX;
 
   if (!ResData) {
     CardSectionList = "Part is not availabe";
   } else {
-    CardSectionList = ResData.map((book) => (
-      <MainPage part={book} key={book._id} />
+    CardSectionList = ResData.map((book, k) => (
+      <MainPage part={book} key={k} />
     ));
+    CardSectionListX = <h1> Waiting for your response </h1>;
+
+    if (!Array.isArray(ResDataX)) {
+      CardSectionListX = <MainPage part={ResDataX} />;
+    }
   }
 
-  return <div> {CardSectionList} </div>;
+  return (
+    <div>
+      {" "}
+      {CardSectionList}
+      <br></br>
+      <hr></hr>
+      <div>{CardSectionListX}</div>
+    </div>
+  );
 }
