@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import socketIOClient from "socket.io-client"; //socket.io
 import axios from "axios";
 // @material-ui/core components //papapap xxxxx
 import { makeStyles } from "@material-ui/core/styles";
@@ -20,8 +21,39 @@ function MainPage(props) {
   const classes = useStyles();
   const part = props.part;
 
-  function createData(_id, title, isbn, author, description, published_date, publisher, updated_date) {
-    return { _id, title, isbn, author, description, published_date, publisher, updated_date };
+  function fetchPart(id) {
+    console.log("ID :: ", id);
+    axios
+      .delete("https://mern01xe.herokuapp.com/api/books/" + id)
+      .then((res) => {
+        console.log("deleteClick done");
+        props.history.push("/");
+      })
+      .catch((err) => {
+        console.log("Error from deleteClick");
+      });
+  }
+
+  function createData(
+    _id,
+    title,
+    isbn,
+    author,
+    description,
+    published_date,
+    publisher,
+    updated_date
+  ) {
+    return {
+      _id,
+      title,
+      isbn,
+      author,
+      description,
+      published_date,
+      publisher,
+      updated_date,
+    };
   }
 
   const rows = [
@@ -60,6 +92,20 @@ function MainPage(props) {
                     <TableCell align="left">{row.description}</TableCell>
                     <TableCell align="leftt">{row.published_date}</TableCell>
                     <TableCell align="left">{row.publisher}</TableCell>
+                    <TableCell align="left">
+                      <button
+                        onClick={() => {
+                          if (
+                            window.confirm(
+                              "Are you sure you wish to delete this item?"
+                            )
+                          )
+                            fetchPart(row._id);
+                        }}
+                      >
+                        Delete me
+                      </button>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -73,33 +119,46 @@ function MainPage(props) {
 
 export default function App(props) {
   const [ResData, setResData] = useState([]);
+  const [ResDataX, setResDataX] = useState([]);
+
+  const ENDPOINT = "https://mern01xe.herokuapp.com/";
 
   useEffect(() => {
-    function fetchPart() {
-      axios
-        .get("https://mern-01.now.sh/api/books")
-        .then((res) => {
-          console.log("Print-ShowPartSection-API-response: " + res.data);
-          setResData(res.data);
-        })
-        .catch((err) => {
-          console.log("Error from ShowPartSection");
-        });
-    }
-    fetchPart();
+    const socket = socketIOClient(ENDPOINT);
+
+    socket.emit("initial_data");
+    socket.on("FromAPI", (data) => {
+      setResData(data);
+    });
+    socket.on("FromAPIx", (data) => {
+      setResDataX(data);
+    });
+    socket.on("change_data", socket.emit("initial_data"));
   }, []);
 
   console.log("XX :: ", ResData);
 
-  var CardSectionList;
+  var CardSectionList, CardSectionListX;
 
   if (!ResData) {
     CardSectionList = "Part is not availabe";
   } else {
-    CardSectionList = ResData.map((book) => (
-      <MainPage part={book} key={book._id} />
+    CardSectionList = ResData.map((book, k) => (
+      <MainPage part={book} key={k} />
     ));
+    CardSectionListX = <h1> Waiting for your response </h1>;
+
+    if (!Array.isArray(ResDataX)) {
+      CardSectionListX = <MainPage part={ResDataX} />;
+    }
   }
 
-  return <div> {CardSectionList} </div>;
+  return (
+    <div>
+      <div>{CardSectionList}</div>
+      <br></br>
+      <hr></hr>
+      <div>{CardSectionListX}</div>
+    </div>
+  );
 }
