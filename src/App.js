@@ -105,8 +105,7 @@ function MainPage(props) {
                       >
                         Delete me
                       </button>
-                    </TableCell>{" "}
-                    *
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -156,8 +155,7 @@ export default function App(props) {
 
   return (
     <div>
-      {" "}
-      {CardSectionList}
+      <div>{CardSectionList}</div>
       <br></br>
       <hr></hr>
       <div>{CardSectionListX}</div>
