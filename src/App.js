@@ -24,7 +24,7 @@ function MainPage(props) {
   function fetchPart(id) {
     console.log("ID :: ", id);
     axios
-      .delete("https://mern-01.now.sh/api/books/" + id)
+      .delete("https://mern01xe.herokuapp.com/api/books/" + id)
       .then((res) => {
         console.log("deleteClick done");
         props.history.push("/");
@@ -122,7 +122,7 @@ export default function App(props) {
   const [ResData, setResData] = useState([]);
   const [ResDataX, setResDataX] = useState([]);
 
-  const ENDPOINT = "https://mern-01.now.sh/";
+  const ENDPOINT = "https://mern01xe.herokuapp.com/";
 
   useEffect(() => {
     const socket = socketIOClient(ENDPOINT);
