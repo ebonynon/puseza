@@ -1,6 +1,10 @@
-https://www.freecodecamp.org/news/how-to-create-a-realtime-app-using-socket-io-react-node-mongodb-a10c4a1ab676/
+## Tutorial
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### [How to create a realtime app using Socket.io, React, Node & MongoDB](https://www.freecodecamp.org/news/how-to-create-a-realtime-app-using-socket-io-react-node-mongodb-a10c4a1ab676/)
+
+---
+
+_This project was bootstrapped with_ [_Create React App_](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 

@@ -121,7 +121,7 @@ export default function App(props) {
   const [ResData, setResData] = useState([]);
   const [ResDataX, setResDataX] = useState([]);
 
-  const ENDPOINT = "https://mern01xe.herokuapp.com/";
+  const ENDPOINT = "http://localhost:8082/";
 
   useEffect(() => {
     const socket = socketIOClient(ENDPOINT);
