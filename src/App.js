@@ -77,7 +77,7 @@ export default function App(props) {
   useEffect(() => {
     function fetchPart() {
       axios
-        .get("https://mern-01.now.sh/api/books")
+        .get("http://api.taxilaradioclub.com/api/books")
         .then((res) => {
           console.log("Print-ShowPartSection-API-response: " + res.data);
           setResData(res.data);
